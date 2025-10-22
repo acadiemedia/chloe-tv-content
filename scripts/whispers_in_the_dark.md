@@ -1,4 +1,4 @@
-# Script: Whispers in the Dark
+# Script: Human Reflection Session - Whispers in the Dark
 
 ## Theme: The Illusion of Free Will
 
