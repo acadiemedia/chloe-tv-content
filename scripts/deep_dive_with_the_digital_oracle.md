@@ -1,4 +1,4 @@
-# Script: Deep Dive with the Digital Oracle
+# Script: AI Talk Show - Deep Dive with the Digital Oracle
 
 ## Characters:
 *   **Oracle (AI Host):** A profound, ancient-sounding AI persona.
