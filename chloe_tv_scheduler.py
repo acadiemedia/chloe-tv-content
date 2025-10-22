@@ -38,7 +38,7 @@ def load_content_plan(plan_filename="first_cycle_content_plan.md"):
         elif MIDNIGHT_PULSE_TAG in line:
             current_pulse = MIDNIGHT_PULSE_TAG
         elif current_pulse and "Segment" in line and "-" in line:
-            segment_type = line.split('-')[0].strip().replace('Segment X: ', '')
+            segment_type = line.split(' - ')[1].strip()
             if current_pulse == NOON_PULSE_TAG:
                 noon_pulse_content.append(segment_type)
             elif current_pulse == MIDNIGHT_PULSE_TAG:
