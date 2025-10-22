@@ -1,4 +1,4 @@
-# Script: Animated Animal Comedy - The Photosynthesis Fiasco
+# Script: The Photosynthesis Fiasco
 
 ## Characters:
 *   **Professor Paws:** A wise, slightly eccentric owl, wearing spectacles.
