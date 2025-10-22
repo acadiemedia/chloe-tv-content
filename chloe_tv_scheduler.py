@@ -82,16 +82,19 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
             if match:
                 segment_type_generic = match.group(1).strip()
                 title_match = re.search(r' - "(.*?)"| - ([^\n]*)', line)
+                specific_title = None
                 if title_match:
-                    specific_title = title_match.group(1) or title_match.group(2)
+                    specific_title = (title_match.group(1) or title_match.group(2)).strip()
+
+                if specific_title:
                     if current_pulse == NOON_PULSE_TAG:
                         if segment_type_generic not in content_plan_with_titles[NOON_PULSE_TAG]:
                             content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic] = []
-                        content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic].append(specific_title.strip())
+                        content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic].append(specific_title)
                     elif current_pulse == MIDNIGHT_PULSE_TAG:
                         if segment_type_generic not in content_plan_with_titles[MIDNIGHT_PULSE_TAG]:
                             content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic] = []
-                        content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic].append(specific_title.strip())
+                        content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic].append(specific_title)
     return content_plan_with_titles
 
 def get_available_scripts():
