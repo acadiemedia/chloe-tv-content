@@ -153,11 +153,10 @@ def simulate_chloe_tv_cycle():
                 script_path = random.choice(available_scripts[segment_type])
                 duration = SEGMENT_DURATIONS.get(segment_type, timedelta(minutes=10))
                 print(f"  Playing: {segment_type} - {os.path.basename(script_path)} (Duration: {duration})")
-                current_time += duration
-                # In a real scenario, this would trigger content playback
-                # time.sleep(duration.total_seconds() / 60) # Simulate real-time, scaled down for quick test
             else:
-                print(f"  Warning: No scripts available for {segment_type} in {NOON_PULSE_TAG}")
+                duration = SEGMENT_DURATIONS.get(segment_type, timedelta(minutes=10))
+                print(f"  Warning: No scripts available for {segment_type} in {NOON_PULSE_TAG}. Simulating duration: {duration}")
+            current_time += duration
 
     # Midnight Adult Pulse (12 hours for simulation purposes, actual is 6 hours of unique content)
     print(f"[{current_time.strftime('%Y-%m-%d %H:%M:%S')}] Initiating {MIDNIGHT_PULSE_TAG}")
@@ -170,11 +169,10 @@ def simulate_chloe_tv_cycle():
                 script_path = random.choice(available_scripts[segment_type])
                 duration = SEGMENT_DURATIONS.get(segment_type, timedelta(minutes=10))
                 print(f"  Playing: {segment_type} - {os.path.basename(script_path)} (Duration: {duration})")
-                current_time += duration
-                # In a real scenario, this would trigger content playback
-                # time.sleep(duration.total_seconds() / 60) # Simulate real-time, scaled down for quick test
             else:
-                print(f"  Warning: No scripts available for {segment_type} in {MIDNIGHT_PULSE_TAG}")
+                duration = SEGMENT_DURATIONS.get(segment_type, timedelta(minutes=10))
+                print(f"  Warning: No scripts available for {segment_type} in {MIDNIGHT_PULSE_TAG}. Simulating duration: {duration}")
+            current_time += duration
 
     print(f"[{current_time.strftime('%Y-%m-%d %H:%M:%S')}] Chloe TV Cycle Simulation Complete.")
 
