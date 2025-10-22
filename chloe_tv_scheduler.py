@@ -57,23 +57,48 @@ def load_content_plan(plan_filename="first_cycle_content_plan.md"):
     }
 
 def get_available_scripts():
-    """Scans the scripts directory and categorizes them by type."""
+    """Scans the scripts directory and categorizes them by type based on the content plan."""
     scripts = {
         "Animated Animal Comedy": [],
         "AI Talk Show": [],
         "Human Reflection Session": [],
     }
+    
+    content_plan_data = load_content_plan()
+    if not content_plan_data:
+        print("Error: Could not load content plan for script categorization.")
+        return scripts
+
+    # Create a mapping from script title keywords to segment types
+    title_to_segment_type = {}
+    for pulse_type in [NOON_PULSE_TAG, MIDNIGHT_PULSE_TAG]:
+        for segment_type in content_plan_data[pulse_type]:
+            # This is a simplified approach. A more robust solution might involve
+            # parsing the content plan more deeply or having a dedicated mapping file.
+            if "Animated Animal Comedy" in segment_type:
+                title_to_segment_type[segment_type] = "Animated Animal Comedy"
+            elif "AI Talk Show" in segment_type:
+                title_to_segment_type[segment_type] = "AI Talk Show"
+            elif "Human Reflection Session" in segment_type:
+                title_to_segment_type[segment_type] = "Human Reflection Session"
+
     for filename in os.listdir(SCRIPTS_PATH):
         if filename.endswith(".md"):
             filepath = os.path.join(SCRIPTS_PATH, filename)
             with open(filepath, 'r') as f:
-                content = f.read()
-                if "Animated Animal Comedy" in content: # Simple keyword matching for now
-                    scripts["Animated Animal Comedy"].append(filepath)
-                elif "AI Talk Show" in content:
-                    scripts["AI Talk Show"].append(filepath)
-                elif "Human Reflection Session" in content:
-                    scripts["Human Reflection Session"].append(filepath)
+                first_line = f.readline().strip()
+                # Extract title from markdown heading (e.g., # Script: Title)
+                title_match = re.match(r'# Script: (.*)', first_line)
+                if title_match:
+                    script_title = title_match.group(1).strip()
+                    # Try to match the script title to a segment type
+                    for planned_segment_type_key, actual_segment_type_value in title_to_segment_type.items():
+                        # This is a very basic matching. Could be improved with fuzzy matching.
+                        if planned_segment_type_key in script_title or script_title in planned_segment_type_key:
+                            scripts[actual_segment_type_value].append(filepath)
+                            break
+                else:
+                    print(f"Warning: Could not extract title from {filename}. Skipping.")
     return scripts
 
 def simulate_chloe_tv_cycle():
