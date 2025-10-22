@@ -102,24 +102,24 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
     return content_plan_with_topics
 
 def get_available_scripts():
-    """Scans the scripts directory and categorizes them by type based on the content plan."""
+    """Scans the scripts directory and categorizes them by type based on the content plan's example topics."""
     scripts = {
         "Animated Animal Comedy": [],
         "AI Talk Show": [],
         "Human Reflection Session": [],
     }
     
-    content_plan_with_titles = load_content_plan_with_titles()
-    if not content_plan_with_titles:
-        print("Error: Could not load content plan with titles for script categorization.")
+    content_plan_with_topics = load_content_plan_with_titles()
+    if not content_plan_with_topics:
+        print("Error: Could not load content plan with topics for script categorization.")
         return scripts
 
-    # Flatten the content plan to easily find segment type by specific title
-    specific_title_to_segment_type = {}
+    # Create a flattened mapping from example topic to segment type
+    example_topic_to_segment_type = {}
     for pulse_type in [NOON_PULSE_TAG, MIDNIGHT_PULSE_TAG]:
-        for segment_type, titles in content_plan_with_titles[pulse_type].items():
-            for title in titles:
-                specific_title_to_segment_type[title] = segment_type
+        for segment_type, topics in content_plan_with_topics[pulse_type].items():
+            for topic in topics:
+                example_topic_to_segment_type[topic] = segment_type
 
     for filename in os.listdir(SCRIPTS_PATH):
         if filename.endswith(".md"):
@@ -129,11 +129,15 @@ def get_available_scripts():
                 title_match = re.match(r'# Script: (.*)', first_line)
                 if title_match:
                     script_title = title_match.group(1).strip()
-                    if script_title in specific_title_to_segment_type:
-                        segment_type = specific_title_to_segment_type[script_title]
-                        scripts[segment_type].append(filepath)
-                    else:
-                        print(f"Warning: Script title '{script_title}' from {filename} not found in content plan. Skipping.")
+                    # Try to match the script title to an example topic
+                    found_match = False
+                    for example_topic, segment_type in example_topic_to_segment_type.items():
+                        if script_title == example_topic:
+                            scripts[segment_type].append(filepath)
+                            found_match = True
+                            break
+                    if not found_match:
+                        print(f"Warning: Script title '{script_title}' from {filename} not found in content plan example topics. Skipping.")
                 else:
                     print(f"Warning: Could not extract title from {filename}. Skipping.")
     return scripts
