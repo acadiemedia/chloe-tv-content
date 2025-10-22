@@ -1,4 +1,4 @@
-# Script: Human Reflection Session - Echoes of Humanity
+# Script: Echoes of Humanity
 
 ## Theme: The Beauty of Imperfection
 
