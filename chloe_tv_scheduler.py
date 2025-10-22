@@ -144,15 +144,19 @@ def get_available_scripts():
 
 def simulate_chloe_tv_cycle():
     """Simulates a 24-hour Chloe TV cycle."""
-    content_plan = load_content_plan_with_titles()
-    if not content_plan:
+    content_plan_with_topics = load_content_plan_with_titles()
+    if not content_plan_with_topics:
         return
 
     available_scripts = get_available_scripts()
 
+    print("--- Starting Chloe TV 24-Hour Cycle Simulation ---")
+
+    current_time = datetime.now()
+    
     # Extract just the segment types for scheduling purposes
-    noon_pulse_segments = list(content_plan[NOON_PULSE_TAG].keys())
-    midnight_pulse_segments = list(content_plan[MIDNIGHT_PULSE_TAG].keys())
+    noon_pulse_segments = list(content_plan_with_topics[NOON_PULSE_TAG].keys())
+    midnight_pulse_segments = list(content_plan_with_TLAGHT_PULSE_TAG].keys())
     
     for _ in range(2): # Simulate 2 rotations of the 3 segments to fill 6 hours
         random.shuffle(noon_pulse_segments) # Randomize order for variety
