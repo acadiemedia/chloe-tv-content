@@ -56,6 +56,44 @@ def load_content_plan(plan_filename="first_cycle_content_plan.md"):
         MIDNIGHT_PULSE_TAG: midnight_pulse_content,
     }
 
+def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
+    """Loads the content plan from the metadata directory, returning segment types and their specific titles."""
+    plan_filepath = os.path.join(METADATA_PATH, plan_filename)
+    if not os.path.exists(plan_filepath):
+        print(f"Error: Content plan not found at {plan_filepath}")
+        return None
+
+    with open(plan_filepath, 'r') as f:
+        content = f.read()
+
+    content_plan_with_titles = {
+        NOON_PULSE_TAG: {},
+        MIDNIGHT_PULSE_TAG: {},
+    }
+
+    current_pulse = None
+    for line in content.split('\n'):
+        if NOON_PULSE_TAG in line:
+            current_pulse = NOON_PULSE_TAG
+        elif MIDNIGHT_PULSE_TAG in line:
+            current_pulse = MIDNIGHT_PULSE_TAG
+        elif current_pulse and "Segment" in line:
+            match = re.search(r'Segment \d+: (.*?)(?: - |$)', line)
+            if match:
+                segment_type_generic = match.group(1).strip()
+                title_match = re.search(r' - "(.*?)"|' - (.*)', line)
+                if title_match:
+                    specific_title = title_match.group(1) or title_match.group(2)
+                    if current_pulse == NOON_PULSE_TAG:
+                        if segment_type_generic not in content_plan_with_titles[NOON_PULSE_TAG]:
+                            content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic] = []
+                        content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic].append(specific_title.strip())
+                    elif current_pulse == MIDNIGHT_PULSE_TAG:
+                        if segment_type_generic not in content_plan_with_titles[MIDNIGHT_PULSE_TAG]:
+                            content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic] = []
+                        content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic].append(specific_title.strip())
+    return content_plan_with_titles
+
 def get_available_scripts():
     """Scans the scripts directory and categorizes them by type based on the content plan."""
     scripts = {
@@ -64,58 +102,44 @@ def get_available_scripts():
         "Human Reflection Session": [],
     }
     
-    content_plan_data = load_content_plan()
-    if not content_plan_data:
-        print("Error: Could not load content plan for script categorization.")
+    content_plan_with_titles = load_content_plan_with_titles()
+    if not content_plan_with_titles:
+        print("Error: Could not load content plan with titles for script categorization.")
         return scripts
 
-    # Create a mapping from script title keywords to segment types
-    title_to_segment_type = {}
+    # Flatten the content plan to easily find segment type by specific title
+    specific_title_to_segment_type = {}
     for pulse_type in [NOON_PULSE_TAG, MIDNIGHT_PULSE_TAG]:
-        for segment_type in content_plan_data[pulse_type]:
-            # This is a simplified approach. A more robust solution might involve
-            # parsing the content plan more deeply or having a dedicated mapping file.
-            if "Animated Animal Comedy" in segment_type:
-                title_to_segment_type[segment_type] = "Animated Animal Comedy"
-            elif "AI Talk Show" in segment_type:
-                title_to_segment_type[segment_type] = "AI Talk Show"
-            elif "Human Reflection Session" in segment_type:
-                title_to_segment_type[segment_type] = "Human Reflection Session"
+        for segment_type, titles in content_plan_with_titles[pulse_type].items():
+            for title in titles:
+                specific_title_to_segment_type[title] = segment_type
 
     for filename in os.listdir(SCRIPTS_PATH):
         if filename.endswith(".md"):
             filepath = os.path.join(SCRIPTS_PATH, filename)
             with open(filepath, 'r') as f:
                 first_line = f.readline().strip()
-                # Extract title from markdown heading (e.g., # Script: Title)
                 title_match = re.match(r'# Script: (.*)', first_line)
                 if title_match:
                     script_title = title_match.group(1).strip()
-                    # Try to match the script title to a segment type
-                    for planned_segment_type_key, actual_segment_type_value in title_to_segment_type.items():
-                        # This is a very basic matching. Could be improved with fuzzy matching.
-                        if planned_segment_type_key in script_title or script_title in planned_segment_type_key:
-                            scripts[actual_segment_type_value].append(filepath)
-                            break
+                    if script_title in specific_title_to_segment_type:
+                        segment_type = specific_title_to_segment_type[script_title]
+                        scripts[segment_type].append(filepath)
+                    else:
+                        print(f"Warning: Script title '{script_title}' from {filename} not found in content plan. Skipping.")
                 else:
                     print(f"Warning: Could not extract title from {filename}. Skipping.")
     return scripts
 
 def simulate_chloe_tv_cycle():
     """Simulates a 24-hour Chloe TV cycle."""
-    content_plan = load_content_plan()
+    content_plan = load_content_plan_with_titles()
     if not content_plan:
         return
 
-    available_scripts = get_available_scripts()
-
-    print("--- Starting Chloe TV 24-Hour Cycle Simulation ---")
-
-    current_time = datetime.now()
-    
-    # Noon Educational Pulse (12 hours for simulation purposes, actual is 6 hours of unique content)
-    print(f"[{current_time.strftime('%Y-%m-%d %H:%M:%S')}] Initiating {NOON_PULSE_TAG}")
-    noon_pulse_segments = content_plan[NOON_PULSE_TAG]
+    # Extract just the segment types for scheduling purposes
+    noon_pulse_segments = list(content_plan[NOON_PULSE_TAG].keys())
+    midnight_pulse_segments = list(content_plan[MIDNIGHT_PULSE_TAG].keys())
     
     for _ in range(2): # Simulate 2 rotations of the 3 segments to fill 6 hours
         random.shuffle(noon_pulse_segments) # Randomize order for variety
