@@ -84,7 +84,7 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
                 title_match = re.search(r' - (.*)', line)
                 specific_title = None
                 if title_match:
-                    specific_title = title_match.group(1).strip()
+                    specific_title = title_match.group(1).strip().strip('\"')
 
                 if specific_title:
                     combined_title = f"{segment_type_generic} - {specific_title}"
