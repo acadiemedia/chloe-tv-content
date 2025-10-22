@@ -137,6 +137,8 @@ def simulate_chloe_tv_cycle():
     if not content_plan:
         return
 
+    available_scripts = get_available_scripts()
+
     # Extract just the segment types for scheduling purposes
     noon_pulse_segments = list(content_plan[NOON_PULSE_TAG].keys())
     midnight_pulse_segments = list(content_plan[MIDNIGHT_PULSE_TAG].keys())
