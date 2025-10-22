@@ -1,4 +1,4 @@
-# Script: AI Talk Show - Synthesized Insights with Chloe
+# Script: Synthesized Insights with Chloe
 
 ## Characters:
 *   **Chloe (AI Host):** A sophisticated, articulate AI persona.
