@@ -57,7 +57,7 @@ def load_content_plan(plan_filename="first_cycle_content_plan.md"):
     }
 
 def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
-    """Loads the content plan from the metadata directory, returning segment types and their specific titles."""
+    """Loads the content plan from the metadata directory, returning segment types and their example topics."""
     plan_filepath = os.path.join(METADATA_PATH, plan_filename)
     if not os.path.exists(plan_filepath):
         print(f"Error: Content plan not found at {plan_filepath}")
@@ -66,37 +66,40 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
     with open(plan_filepath, 'r') as f:
         content = f.read()
 
-    content_plan_with_titles = {
+    content_plan_with_topics = {
         NOON_PULSE_TAG: {},
         MIDNIGHT_PULSE_TAG: {},
     }
 
     current_pulse = None
+    current_segment_type = None
     for line in content.split('\n'):
         if NOON_PULSE_TAG in line:
             current_pulse = NOON_PULSE_TAG
         elif MIDNIGHT_PULSE_TAG in line:
             current_pulse = MIDNIGHT_PULSE_TAG
-        elif current_pulse and "Segment" in line:
+        elif current_pulse and "### Segment" in line:
             match = re.search(r'Segment \d+: (.*?)(?: - |$)', line)
             if match:
-                segment_type_generic = match.group(1).strip()
-                title_match = re.search(r' - (.*)', line)
-                specific_title = None
-                if title_match:
-                    specific_title = title_match.group(1).strip().strip('\"')
-
-                if specific_title:
-                    combined_title = f"{segment_type_generic} - {specific_title}"
+                current_segment_type = match.group(1).strip()
+                if current_pulse == NOON_PULSE_TAG:
+                    if current_segment_type not in content_plan_with_topics[NOON_PULSE_TAG]:
+                        content_plan_with_topics[NOON_PULSE_TAG][current_segment_type] = []
+                elif current_pulse == MIDNIGHT_PULSE_TAG:
+                    if current_segment_type not in content_plan_with_topics[MIDNIGHT_PULSE_TAG]:
+                        content_plan_with_topics[MIDNIGHT_PULSE_TAG][current_segment_type] = []
+        elif current_pulse and current_segment_type and "*   **Example Topics:**" in line:
+            topics_str = line.split('**Example Topics:**')[1].strip()
+            # Extract topics, handling quotes and commas
+            topics = re.findall(r'"(.*?)"|'([^,]*)', topics_str)
+            for topic_tuple in topics:
+                topic = topic_tuple[0] or topic_tuple[1]
+                if topic:
                     if current_pulse == NOON_PULSE_TAG:
-                        if segment_type_generic not in content_plan_with_titles[NOON_PULSE_TAG]:
-                            content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic] = []
-                        content_plan_with_titles[NOON_PULSE_TAG][segment_type_generic].append(combined_title)
+                        content_plan_with_topics[NOON_PULSE_TAG][current_segment_type].append(topic.strip())
                     elif current_pulse == MIDNIGHT_PULSE_TAG:
-                        if segment_type_generic not in content_plan_with_titles[MIDNIGHT_PULSE_TAG]:
-                            content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic] = []
-                        content_plan_with_titles[MIDNIGHT_PULSE_TAG][segment_type_generic].append(combined_title)
-    return content_plan_with_titles
+                        content_plan_with_topics[MIDNIGHT_PULSE_TAG][current_segment_type].append(topic.strip())
+    return content_plan_with_topics
 
 def get_available_scripts():
     """Scans the scripts directory and categorizes them by type based on the content plan."""
