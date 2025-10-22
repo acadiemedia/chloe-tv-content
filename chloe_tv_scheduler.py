@@ -1,3 +1,4 @@
+import re
 import os
 import random
 import time
@@ -37,12 +38,14 @@ def load_content_plan(plan_filename="first_cycle_content_plan.md"):
             current_pulse = NOON_PULSE_TAG
         elif MIDNIGHT_PULSE_TAG in line:
             current_pulse = MIDNIGHT_PULSE_TAG
-        elif current_pulse and "Segment" in line and "-" in line:
-            segment_type = line.split(' - ')[1].strip()
-            if current_pulse == NOON_PULSE_TAG:
-                noon_pulse_content.append(segment_type)
-            elif current_pulse == MIDNIGHT_PULSE_TAG:
-                midnight_pulse_content.append(segment_type)
+        elif current_pulse and "Segment" in line:
+            match = re.search(r'Segment \d+: (.*?)(?: - |$)', line)
+            if match:
+                segment_type = match.group(1).strip()
+                if current_pulse == NOON_PULSE_TAG:
+                    noon_pulse_content.append(segment_type)
+                elif current_pulse == MIDNIGHT_PULSE_TAG:
+                    midnight_pulse_content.append(segment_type)
     
     # Remove duplicates and maintain order
     noon_pulse_content = list(dict.fromkeys(noon_pulse_content))
