@@ -143,8 +143,8 @@ def get_available_scripts():
                             found_match = True
                             break
                     if not found_match:
-                        print(f"DEBUG: Script title normalized: '{script_title_normalized}'")
-                        print(f"DEBUG: Example topics normalized: {[t.lower().strip() for t in example_topic_to_segment_type.keys()]}")
+                        print(f"DEBUG: Script title normalized: '{script_title_normalized}' (len: {len(script_title_normalized)})")
+                        print(f"DEBUG: Example topics normalized: {[f'\'{t}' (len: {len(t)})' for t in example_topic_to_segment_type.keys()]}")
                         print(f"Warning: Script title '{script_title}' from {filename} not found in content plan example topics. Skipping.")
                 else:
                     print(f"Warning: Could not extract title from {filename}. Skipping.")
