@@ -131,8 +131,10 @@ def get_available_scripts():
                     script_title = title_match.group(1).strip()
                     # Try to match the script title to an example topic
                     found_match = False
+                    script_title_normalized = script_title.lower().strip()
                     for example_topic, segment_type in example_topic_to_segment_type.items():
-                        if script_title.lower() in example_topic.lower() or example_topic.lower() in script_title.lower():
+                        example_topic_normalized = example_topic.lower().strip()
+                        if script_title_normalized == example_topic_normalized:
                             scripts[segment_type].append(filepath)
                             found_match = True
                             break
