@@ -92,7 +92,11 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
             topics_str = line.split('**Example Topics:**')[1].strip()
             # Extract topics, handling quotes and commas
             # This regex now specifically looks for quoted strings or unquoted strings separated by commas
-            topics = [t.strip().strip('\"') for t in re.findall(r'"(.*?)"|([^,]+)', topics_str) if t.strip()]
+            topics = []
+            for topic_tuple in re.findall(r'"(.*?)"|([^,]+)', topics_str):
+                topic = topic_tuple[0] or topic_tuple[1]
+                if topic:
+                    topics.append(topic.strip().strip('\"'))
             for topic in topics:
                 if topic:
                     if current_pulse == NOON_PULSE_TAG:
