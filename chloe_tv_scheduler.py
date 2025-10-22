@@ -81,7 +81,7 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
             match = re.search(r'Segment \d+: (.*?)(?: - |$)', line)
             if match:
                 segment_type_generic = match.group(1).strip()
-                title_match = re.search(r' - "(.*?)"|' - (.*)', line)
+                title_match = re.search(r' - "(.*?)"| - ([^\n]*)', line)
                 if title_match:
                     specific_title = title_match.group(1) or title_match.group(2)
                     if current_pulse == NOON_PULSE_TAG:
