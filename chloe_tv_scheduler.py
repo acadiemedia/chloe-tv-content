@@ -172,7 +172,7 @@ def simulate_chloe_tv_cycle():
 
     # Midnight Adult Pulse (12 hours for simulation purposes, actual is 6 hours of unique content)
     print(f"[{current_time.strftime('%Y-%m-%d %H:%M:%S')}] Initiating {MIDNIGHT_PULSE_TAG}")
-    midnight_pulse_segments = content_plan[MIDNIGHT_PULSE_TAG]
+    midnight_pulse_segments = list(content_plan_with_topics[MIDNIGHT_PULSE_TAG].keys())
 
     for _ in range(2): # Simulate 2 rotations of the 3 segments to fill 6 hours
         random.shuffle(midnight_pulse_segments) # Randomize order for variety
