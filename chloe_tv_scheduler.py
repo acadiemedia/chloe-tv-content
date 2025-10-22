@@ -132,7 +132,7 @@ def get_available_scripts():
                     # Try to match the script title to an example topic
                     found_match = False
                     for example_topic, segment_type in example_topic_to_segment_type.items():
-                        if script_title == example_topic:
+                        if script_title.lower() in example_topic.lower() or example_topic.lower() in script_title.lower():
                             scripts[segment_type].append(filepath)
                             found_match = True
                             break
