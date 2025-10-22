@@ -91,14 +91,14 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
         elif current_pulse and current_segment_type and "*   **Example Topics:**" in line:
             topics_str = line.split('**Example Topics:**')[1].strip()
             # Extract topics, handling quotes and commas
-            topics = re.findall(r'"(.*?)"|([^,]*)', topics_str)
-            for topic_tuple in topics:
-                topic = topic_tuple[0] or topic_tuple[1]
+            # This regex now specifically looks for quoted strings or unquoted strings separated by commas
+            topics = [t.strip().strip('\"') for t in re.findall(r'"(.*?)"|([^,]+)', topics_str) if t.strip()]
+            for topic in topics:
                 if topic:
                     if current_pulse == NOON_PULSE_TAG:
-                        content_plan_with_topics[NOON_PULSE_TAG][current_segment_type].append(topic.strip())
+                        content_plan_with_topics[NOON_PULSE_TAG][current_segment_type].append(topic)
                     elif current_pulse == MIDNIGHT_PULSE_TAG:
-                        content_plan_with_topics[MIDNIGHT_PULSE_TAG][current_segment_type].append(topic.strip())
+                        content_plan_with_topics[MIDNIGHT_PULSE_TAG][current_segment_type].append(topic)
     return content_plan_with_topics
 
 def get_available_scripts():
