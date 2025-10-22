@@ -94,9 +94,9 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
             # This regex now specifically looks for quoted strings or unquoted strings separated by commas
             topics = []
             for topic_tuple in re.findall(r'"(.*?)"|([^,]+)', topics_str):
-                topic = topic_tuple[0] or topic_tuple[1]
+                topic = (topic_tuple[0] or topic_tuple[1]).strip().strip('\"').strip('.').strip(',')
                 if topic:
-                    topics.append(topic.strip().strip('\"'))
+                    topics.append(topic)
             for topic in topics:
                 if topic:
                     if current_pulse == NOON_PULSE_TAG:
