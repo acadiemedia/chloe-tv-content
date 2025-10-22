@@ -91,7 +91,7 @@ def load_content_plan_with_titles(plan_filename="first_cycle_content_plan.md"):
         elif current_pulse and current_segment_type and "*   **Example Topics:**" in line:
             topics_str = line.split('**Example Topics:**')[1].strip()
             # Extract topics, handling quotes and commas
-            topics = re.findall(r'"(.*?)"|'([^,]*)', topics_str)
+            topics = re.findall(r'"(.*?)"|([^,]*)', topics_str)
             for topic_tuple in topics:
                 topic = topic_tuple[0] or topic_tuple[1]
                 if topic:
