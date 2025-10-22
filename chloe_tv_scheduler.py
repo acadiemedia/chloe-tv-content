@@ -156,7 +156,7 @@ def simulate_chloe_tv_cycle():
     
     # Extract just the segment types for scheduling purposes
     noon_pulse_segments = list(content_plan_with_topics[NOON_PULSE_TAG].keys())
-    midnight_pulse_segments = list(content_plan_with_TLAGHT_PULSE_TAG].keys())
+    midnight_pulse_segments = list(content_plan_with_topics[MIDNIGHT_PULSE_TAG].keys())
     
     for _ in range(2): # Simulate 2 rotations of the 3 segments to fill 6 hours
         random.shuffle(noon_pulse_segments) # Randomize order for variety
