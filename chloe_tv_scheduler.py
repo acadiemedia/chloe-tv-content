@@ -123,7 +123,7 @@ def get_available_scripts():
     for pulse_type in [NOON_PULSE_TAG, MIDNIGHT_PULSE_TAG]:
         for segment_type, topics in content_plan_with_topics[pulse_type].items():
             for topic in topics:
-                example_topic_to_segment_type[topic] = segment_type
+                example_topic_to_segment_type[topic.lower().strip()] = segment_type
 
     for filename in os.listdir(SCRIPTS_PATH):
         if filename.endswith(".md"):
