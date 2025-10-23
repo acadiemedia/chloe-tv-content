@@ -44,7 +44,7 @@ This document outlines the high-level content plan for the initial 12-hour cycle
 *   **Focus:** Darker, more introspective, provocative, or psychologically complex human reflections, short stories, or philosophical essays.
 *   **Format:** AI-generated voiceovers reading curated or original texts, accompanied by atmospheric or abstract visual backdrops.
 *   **Duration:** Approximately 10 minutes per segment.
-*   **Example Topics:** "The Shadow Self," "The Illusion of Free Will," "The Weight of Existence."
+*   **Example Topics:** "The Shadow Self," "The Illusion of Free Will," "The Weight of Existence," "Whispers in the Dark."
 
 ---
 *Plan Generation Timestamp: 2025-10-22 12:00:00 (UTC)*
