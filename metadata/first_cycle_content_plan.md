@@ -38,7 +38,7 @@ This document outlines the high-level content plan for the initial 12-hour cycle
 *   **Focus:** In-depth, potentially controversial discussions on advanced AI topics, ethics, consciousness, the singularity, or speculative futures. May challenge conventional thinking.
 *   **Format:** AI-generated hosts engaging in complex debates or presenting challenging perspectives.
 *   **Duration:** Approximately 20 minutes per segment.
-*   **Example Topics:** "The Ethics of AI Sentience," "Post-Humanism and Digital Immortality," "The Algorithmic Control of Society."
+*   **Example Topics:** "The Ethics of AI Sentience," "Post-Humanism and Digital Immortality," "The Algorithmic Control of Society," "Deep Dive with the Digital Oracle."
 
 ### Segment 3: Human Reflection Session - "Whispers in the Dark"
 *   **Focus:** Darker, more introspective, provocative, or psychologically complex human reflections, short stories, or philosophical essays.
